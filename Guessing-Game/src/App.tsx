@@ -1,15 +1,22 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useRef } from 'react';
 
 
 
 function App() {
-  let random = Math.round(Math.random() * 15 + 1)
+  let random = useMemo(() => Math.round(Math.random() * 15 + 1),[]);
   let [userInput, setUserInput] = useState(-1);
-  const outputRef = useRef(null);
-
-  function handleSubmit() {
-  }
+  let [message, setMessage] = useState("");
+  function handleSubmit(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault()
+    if (userInput == random) {
+        setMessage("You got it right, try guessing another one!");
+        random = useMemo(() => Math.round(Math.random() * 15 + 1),[])
+    }
+    else {
+      setMessage("Wrong, try again")
+    }
+  } 
 
   return (
     <>
@@ -20,7 +27,7 @@ function App() {
       <button onClick={handleSubmit}>Add</button>
     </form>
 
-    <h1 ref={outputRef}></h1>
+    <h1 className='message'>{message}</h1>
 
     </>
 
