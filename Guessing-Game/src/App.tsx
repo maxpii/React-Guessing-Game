@@ -1,20 +1,31 @@
-import { useMemo, useState } from 'react'
-import { useRef } from 'react';
+import { useMemo, useState,useCallback } from 'react'
+//import { useRef } from 'react';
 
+
+function getRandom () {
+  return Math.floor(Math.random() * 15) + 1;
+}
 
 
 function App() {
-  let random = useMemo(() => Math.round(Math.random() * 15 + 1),[]);
   let [userInput, setUserInput] = useState(-1);
   let [message, setMessage] = useState("");
+
+  
+  
+
   function handleSubmit(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault()
-    if (userInput == random) {
+    event.preventDefault();
+    let random = useCallback(getRandom,[]);
+    let x = random();
+    console.log(random);
+    console.log(userInput);
+    if (userInput == x) {
         setMessage("You got it right, try guessing another one!");
-        random = useMemo(() => Math.round(Math.random() * 15 + 1),[])
     }
     else {
       setMessage("Wrong, try again")
+      x = random();
     }
   } 
 
@@ -24,7 +35,9 @@ function App() {
     <h1>Guess the number I'm thinking of</h1>
     <form action="">
       <input onChange= { e => setUserInput(Number(e.target.value))} type="text" placeholder='your number'/>
-      <button onClick={handleSubmit}>Add</button>
+      <button onClick={
+        useCallback(handleSubmit,[])
+        }>Submit</button>
     </form>
 
     <h1 className='message'>{message}</h1>
